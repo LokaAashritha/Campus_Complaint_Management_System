@@ -1,14 +1,26 @@
 const express = require('express');
 const router = express.Router();
+const Complaint = require('../models/Complaint');
 
-// Get all complaints
-router.get('/', (req, res) => {
-  res.json({ message: 'Complaints list API working' });
+// ➕ Add complaint
+router.post('/', async (req, res) => {
+  try {
+    const complaint = new Complaint(req.body);
+    await complaint.save();
+    res.status(201).json(complaint);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 });
 
-// Add complaint
-router.post('/', (req, res) => {
-  res.json({ message: 'Complaint submitted successfully' });
+// 📄 Get all complaints
+router.get('/', async (req, res) => {
+  try {
+    const complaints = await Complaint.find();
+    res.json(complaints);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 });
 
 module.exports = router;
