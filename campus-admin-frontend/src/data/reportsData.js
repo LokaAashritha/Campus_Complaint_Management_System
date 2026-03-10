@@ -1,0 +1,32 @@
+export const REPORTS_DATA = [
+  {
+    id: 1001,
+    title: "WiFi not working",
+    category: "Network",
+    status: "Open",
+    priority: "High",
+    student: "ST1045",
+    assignedStaff: "IT Team",
+    createdAt: "2024-04-10",
+  },
+  {
+    id: 1002,
+    title: "Water leakage in hostel",
+    category: "Hostel",
+    status: "Resolved",
+    priority: "Normal",
+    student: "ST2033",
+    assignedStaff: "Maintenance Team",
+    createdAt: "2024-04-05",
+  },
+  {
+    id: 1003,
+    title: "Broken door lock",
+    category: "Security",
+    status: "Overdue",
+    priority: "High",
+    student: "ST1502",
+    assignedStaff: "Security Team",
+    createdAt: "2024-03-22",
+  },
+];

@@ -1,0 +1,49 @@
+.categories-page {
+  width: 100%;
+}
+
+.categories-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.categories-card {
+  background: #ffffff;
+  border-radius: 10px;
+  padding: 20px;
+}
+
+.categories-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.categories-table th {
+  background: #f1f5f9;
+  text-align: left;
+  padding: 12px;
+}
+
+.categories-table td {
+  padding: 12px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.categories-table select {
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1px solid #d1d5db;
+}
+
+.edit-action {
+  color: #2563eb;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.save-row {
+  margin-top: 16px;
+  text-align: right;
+}

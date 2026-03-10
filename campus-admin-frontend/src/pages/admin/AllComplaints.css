@@ -1,0 +1,154 @@
+.complaints-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.complaints-header h2 {
+  font-size: 26px;
+  font-weight: 700;
+}
+
+.create-btn {
+  background: #2563eb;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* Filters */
+.filters-card {
+  background: #f8fafc;
+  padding: 16px;
+  border-radius: 14px;
+  margin-bottom: 20px;
+}
+
+.search-input {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid #cbd5e1;
+  margin-bottom: 14px;
+}
+
+.filters-row {
+  display: flex;
+  gap: 12px;
+}
+
+.filters-row select {
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid #cbd5e1;
+  min-width: 160px;
+}
+
+.search-btn {
+  background: #2563eb;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 10px;
+  font-weight: 600;
+}
+
+/* Table */
+.table-card {
+  background: white;
+  border-radius: 14px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+  overflow: hidden;
+}
+
+.complaints-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.complaints-table th {
+  background: #e5e7eb;
+  text-align: left;
+  padding: 12px;
+}
+
+.complaints-table td {
+  padding: 12px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.link {
+  color: #2563eb;
+  font-weight: 600;
+}
+
+/* Badges */
+.badge {
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.status.pending {
+  background: #facc15;
+}
+
+.status.in-progress {
+  background: #3b82f6;
+  color: white;
+}
+
+.status.resolved {
+  background: #16a34a;
+  color: white;
+}
+
+.priority.high {
+  background: #f87171;
+  color: white;
+}
+
+.priority.normal {
+  background: #6ee7b7;
+}
+
+/* Actions */
+.view-btn {
+  background: #2563eb;
+  color: white;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+/* Pagination */
+.pagination {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px;
+}
+
+.pagination button {
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: 1px solid #cbd5e1;
+  background: white;
+}
+
+.pagination .active {
+  background: #2563eb;
+  color: white;
+}
+
+.pagination select {
+  margin-left: auto;
+  padding: 6px 10px;
+  border-radius: 8px;
+}
