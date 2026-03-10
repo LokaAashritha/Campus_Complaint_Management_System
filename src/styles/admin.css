@@ -1,0 +1,55 @@
+.admin-root {
+  display: flex;
+  min-height: 100vh;
+}
+
+.sidebar {
+  width: 220px;
+  background: #1e3a8a;
+  color: white;
+  padding: 20px;
+}
+
+.sidebar a {
+  display: block;
+  color: white;
+  margin: 10px 0;
+  text-decoration: none;
+}
+
+.content {
+  flex: 1;
+  padding: 30px;
+  background: #f4f6f8;
+}
+
+table {
+  width: 100%;
+  background: white;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 12px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.priority.high {
+  background: #fee2e2;
+  color: #991b1b;
+  padding: 4px 10px;
+  border-radius: 12px;
+}
+
+.priority.normal {
+  background: #e5e7eb;
+  padding: 4px 10px;
+  border-radius: 12px;
+}
+
+.alert {
+  background: #fde68a;
+  padding: 15px;
+  border-radius: 8px;
+  margin-top: 20px;
+}
