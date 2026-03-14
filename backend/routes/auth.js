@@ -9,7 +9,7 @@ const User = require('../models/User');
 // =======================
 router.post('/register', async (req, res) => {
   try {
-    const { name, email, password, role } = req.body;
+    const { name, email, password, role, adminSecret } = req.body;
 
     if (!name || !email || !password) {
       return res.status(400).json({ message: 'All fields are required' });
@@ -23,11 +23,23 @@ router.post('/register', async (req, res) => {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
+    let resolvedRole = 'student';
+
+    if (role === 'admin') {
+      const expectedSecret = process.env.ADMIN_REGISTRATION_SECRET;
+
+      if (!expectedSecret || adminSecret !== expectedSecret) {
+        return res.status(403).json({ message: 'Admin registration is not allowed' });
+      }
+
+      resolvedRole = 'admin';
+    }
+
     const user = new User({
       name,
       email,
       password: hashedPassword,
-      role: role || 'student'
+      role: resolvedRole
     });
 
     await user.save();

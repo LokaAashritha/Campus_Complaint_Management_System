@@ -1,26 +1,34 @@
-const express = require('express');
-const router = express.Router();
-const Complaint = require('../models/Complaint');
+const mongoose = require('mongoose');
 
-// ➕ Add complaint
-router.post('/', async (req, res) => {
-  try {
-    const complaint = new Complaint(req.body);
-    await complaint.save();
-    res.status(201).json(complaint);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
+const complaintSchema = new mongoose.Schema({
+  title: {
+    type: String,
+    required: true
+  },
+
+  description: {
+    type: String,
+    required: true
+  },
+
+  category: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Category',
+    required: true
+  },
+
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true
+  },
+
+  status: {
+    type: String,
+    enum: ['Pending', 'In Progress', 'Resolved'],
+    default: 'Pending'
   }
-});
 
-// 📄 Get all complaints
-router.get('/', async (req, res) => {
-  try {
-    const complaints = await Complaint.find();
-    res.json(complaints);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
+}, { timestamps: true });
 
-module.exports = router;
+module.exports = mongoose.model('Complaint', complaintSchema);
