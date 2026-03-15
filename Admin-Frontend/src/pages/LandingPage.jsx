@@ -1,34 +1,7 @@
 import { Link } from "react-router-dom";
 import "./LandingPage.css";
 
-function hasSession(tokenKey, userKey, expectedRole) {
-  const token = localStorage.getItem(tokenKey);
-  const rawUser = localStorage.getItem(userKey);
-
-  if (!token || !rawUser) {
-    return false;
-  }
-
-  try {
-    const user = JSON.parse(rawUser);
-    return user?.role === expectedRole;
-  } catch {
-    return false;
-  }
-}
-
 export default function LandingPage() {
-  const hasStudentAccess = hasSession("student_token", "student_user", "student");
-  const hasAdminAccess = hasSession("admin_token", "admin_user", "admin");
-
-  const studentPrimaryPath = hasStudentAccess ? "/student/dashboard" : "/student/login";
-  const studentPrimaryLabel = hasStudentAccess
-    ? "Continue as Student"
-    : "Student Login";
-
-  const adminPrimaryPath = hasAdminAccess ? "/admin" : "/admin/login";
-  const adminPrimaryLabel = hasAdminAccess ? "Open Admin Panel" : "Admin Login";
-
   return (
     <div className="landing-page">
       <div className="landing-noise" aria-hidden="true" />
@@ -41,12 +14,6 @@ export default function LandingPage() {
             <p>One portal for students and administration.</p>
           </div>
         </div>
-
-        <nav className="landing-nav">
-          <Link to={studentPrimaryPath}>{studentPrimaryLabel}</Link>
-          <Link to="/student/register">Register</Link>
-          <Link to={adminPrimaryPath}>{adminPrimaryLabel}</Link>
-        </nav>
       </header>
 
       <main className="landing-hero">
@@ -59,14 +26,12 @@ export default function LandingPage() {
           </p>
 
           <div className="landing-actions">
-            <Link className="landing-btn primary" to={studentPrimaryPath}>
-              {studentPrimaryLabel}
+            <Link className="landing-btn primary" to="/student/login">
+              Student Login
             </Link>
-            <Link className="landing-btn warm" to="/student/register">
-              Student Registration
-            </Link>
-            <Link className="landing-btn ghost" to={adminPrimaryPath}>
-              {adminPrimaryLabel}
+
+            <Link className="landing-btn ghost" to="/admin/login">
+              Admin Login
             </Link>
           </div>
 
@@ -97,11 +62,6 @@ export default function LandingPage() {
       </main>
 
       <footer className="landing-footer">
-        <div className="landing-footer-links">
-          <Link to={studentPrimaryPath}>Student</Link>
-          <Link to={adminPrimaryPath}>Admin</Link>
-          <Link to="/student/register">Create Student Account</Link>
-        </div>
         <p>Showcase Ready - Campus Complaint Management System</p>
       </footer>
     </div>

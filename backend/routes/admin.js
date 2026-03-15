@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { authMiddleware, adminOnly } = require('../middleware/auth');
 const Complaint = require('../models/Complaint');
+const User = require('../models/User');
 
 /* Test route */
 router.get('/test', (req, res) => {
@@ -18,6 +19,38 @@ router.get('/complaints', authMiddleware, adminOnly, async (req, res) => {
     res.json(complaints);
   } catch (err) {
     res.status(500).json({ message: 'Failed to fetch complaints' });
+  }
+});
+
+/* Get admin profile (Admin only) */
+router.get('/profile', authMiddleware, adminOnly, async (req, res) => {
+  try {
+    if (!req.user) {
+      return res.status(401).json({ message: 'Unauthorized' });
+    }
+
+    return res.json({
+      id: req.user._id,
+      name: req.user.name,
+      email: req.user.email,
+      role: req.user.role,
+      createdAt: req.user.createdAt
+    });
+  } catch (err) {
+    return res.status(500).json({ message: 'Failed to fetch admin profile' });
+  }
+});
+
+/* Get all registered student users (Admin only) */
+router.get('/users', authMiddleware, adminOnly, async (req, res) => {
+  try {
+    const users = await User.find({ role: 'student' })
+      .select('name email role createdAt')
+      .sort({ createdAt: -1 });
+
+    return res.json(users);
+  } catch (err) {
+    return res.status(500).json({ message: 'Failed to fetch users' });
   }
 });
 

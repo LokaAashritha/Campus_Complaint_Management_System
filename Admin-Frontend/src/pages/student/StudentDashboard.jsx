@@ -18,6 +18,22 @@ function getStoredUser() {
   }
 }
 
+function getStatusClass(status) {
+  if (status === "Pending") {
+    return "pending";
+  }
+
+  if (status === "In Progress") {
+    return "in-progress";
+  }
+
+  if (status === "Resolved") {
+    return "resolved";
+  }
+
+  return "default";
+}
+
 export default function StudentDashboard() {
   const navigate = useNavigate();
 
@@ -115,6 +131,39 @@ export default function StudentDashboard() {
     [complaints]
   );
 
+  const recentComplaints = useMemo(
+    () =>
+      [...complaints]
+        .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+        .slice(0, 3),
+    [complaints]
+  );
+
+  const completionRate = useMemo(() => {
+    if (complaints.length === 0) {
+      return 0;
+    }
+
+    return Math.round((resolvedCount / complaints.length) * 100);
+  }, [complaints, resolvedCount]);
+
+  const todayLabel = useMemo(
+    () =>
+      new Date().toLocaleDateString(undefined, {
+        weekday: "long",
+        month: "long",
+        day: "numeric",
+      }),
+    []
+  );
+
+  const menuItems = [
+    { key: "dashboard", label: "Dashboard", icon: FaHome },
+    { key: "raise", label: "Raise Complaint", icon: FaPlus },
+    { key: "my", label: "My Complaints", icon: FaList },
+    { key: "profile", label: "Profile", icon: FaUser },
+  ];
+
   if (!user) {
     return <Navigate to="/student/login" replace />;
   }
@@ -122,25 +171,34 @@ export default function StudentDashboard() {
   return (
     <div className="student-layout">
       <header className="student-header">
-        <h2>Campus Complaint Management System</h2>
-        <span>Welcome, {user.name}</span>
+        <div>
+          <p className="student-header-kicker">Student Portal</p>
+          <h2>Campus Complaint Management System</h2>
+        </div>
+
+        <div className="student-header-user">
+          <span>Welcome back</span>
+          <strong>{user.name}</strong>
+        </div>
       </header>
 
       <div className="student-main-section">
         <aside className="student-sidebar">
-          <div>
-            <button className="student-menu-tile" onClick={() => setMenu("dashboard")}> 
-              <FaHome /> Dashboard
-            </button>
-            <button className="student-menu-tile" onClick={() => setMenu("raise")}>
-              <FaPlus /> Raise Complaint
-            </button>
-            <button className="student-menu-tile" onClick={() => setMenu("my")}>
-              <FaList /> My Complaints
-            </button>
-            <button className="student-menu-tile" onClick={() => setMenu("profile")}>
-              <FaUser /> Profile
-            </button>
+          <div className="student-menu-list">
+            {menuItems.map((item) => {
+              const Icon = item.icon;
+
+              return (
+                <button
+                  key={item.key}
+                  className={`student-menu-tile ${menu === item.key ? "active" : ""}`}
+                  onClick={() => setMenu(item.key)}
+                >
+                  <Icon />
+                  <span>{item.label}</span>
+                </button>
+              );
+            })}
           </div>
 
           <button className="student-logout" onClick={handleLogout}>
@@ -154,40 +212,99 @@ export default function StudentDashboard() {
               {error && <p className="student-status-message error">{error}</p>}
               {message && <p className="student-status-message success">{message}</p>}
 
+              <section className="student-hero">
+                <div>
+                  <p className="student-hero-kicker">Student Space</p>
+                  <h3>Track every complaint with complete clarity.</h3>
+                  <p>
+                    Raise issues in minutes, monitor progress live, and stay informed
+                    until resolution.
+                  </p>
+                </div>
+
+                <div className="student-hero-meta">
+                  <span>{todayLabel}</span>
+                  <strong>{completionRate}% resolved so far</strong>
+                </div>
+              </section>
+
               <div className="student-cards">
-                <article className="student-card blue">
-                  <h3>Total Complaints</h3>
+                <article className="student-card total">
+                  <span className="student-card-label">Total Complaints</span>
                   <p>{complaints.length}</p>
+                  <small>All issues submitted by you</small>
                 </article>
-                <article className="student-card orange">
-                  <h3>Pending</h3>
+
+                <article className="student-card pending">
+                  <span className="student-card-label">Pending</span>
                   <p>{pendingCount}</p>
+                  <small>Awaiting review by staff</small>
                 </article>
-                <article className="student-card blue">
-                  <h3>In Progress</h3>
+
+                <article className="student-card in-progress">
+                  <span className="student-card-label">In Progress</span>
                   <p>{inProgressCount}</p>
+                  <small>Currently being worked on</small>
                 </article>
-                <article className="student-card green">
-                  <h3>Resolved</h3>
+
+                <article className="student-card resolved">
+                  <span className="student-card-label">Resolved</span>
                   <p>{resolvedCount}</p>
+                  <small>Closed successfully</small>
                 </article>
               </div>
 
-              <section className="student-info-box">
-                <h3>About CCMS</h3>
-                <p>
-                  Campus Complaint Management System is a structured and transparent
-                  platform for students to raise and track issues in college and
-                  hostel facilities. The portal reduces manual work, improves
-                  communication, and helps administrators resolve complaints faster.
-                </p>
-              </section>
+              <div className="student-info-grid">
+                <section className="student-info-box">
+                  <div className="student-section-heading">
+                    <h3>Recent Activity</h3>
+                    <span>{recentComplaints.length} latest</span>
+                  </div>
+
+                  {recentComplaints.length === 0 ? (
+                    <p className="student-empty-state">
+                      No recent complaints yet. Use Raise Complaint to get started.
+                    </p>
+                  ) : (
+                    <ul className="student-recent-list">
+                      {recentComplaints.map((complaint) => (
+                        <li key={complaint._id} className="student-recent-item">
+                          <div>
+                            <p className="student-recent-item-title">{complaint.title}</p>
+                            <p>{complaint.category?.name || "General"}</p>
+                          </div>
+
+                          <span
+                            className={`student-status-pill ${getStatusClass(
+                              complaint.status
+                            )}`}
+                          >
+                            {complaint.status}
+                          </span>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </section>
+
+                <section className="student-info-box">
+                  <h3>About CCMS</h3>
+                  <p>
+                    Campus Complaint Management System is a transparent platform for
+                    students to report and track issues in classrooms, hostels, and
+                    facilities. It improves communication and speeds up resolution.
+                  </p>
+                </section>
+              </div>
             </>
           )}
 
           {menu === "raise" && (
             <section className="student-form-box">
-              <h3>Raise Complaint</h3>
+              <div className="student-section-heading">
+                <h3>Raise Complaint</h3>
+                <span>Share clear details for faster action</span>
+              </div>
 
               {error && <p className="student-status-message error">{error}</p>}
               {message && <p className="student-status-message success">{message}</p>}
@@ -230,13 +347,16 @@ export default function StudentDashboard() {
           )}
 
           {menu === "my" && (
-            <section>
-              <h3>My Complaints</h3>
+            <section className="student-list-section">
+              <div className="student-section-heading">
+                <h3>My Complaints</h3>
+                <span>{complaints.length} total records</span>
+              </div>
 
               {loading ? (
-                <p>Loading complaints...</p>
+                <p className="student-empty-state">Loading complaints...</p>
               ) : complaints.length === 0 ? (
-                <p>No complaints yet.</p>
+                <p className="student-empty-state">No complaints yet.</p>
               ) : (
                 <div className="student-table-wrap">
                   <table className="student-complaint-table">
@@ -255,7 +375,15 @@ export default function StudentDashboard() {
                           <td>{complaint._id.slice(-6)}</td>
                           <td>{complaint.title}</td>
                           <td>{complaint.category?.name || "N/A"}</td>
-                          <td>{complaint.status}</td>
+                          <td>
+                            <span
+                              className={`student-status-pill ${getStatusClass(
+                                complaint.status
+                              )}`}
+                            >
+                              {complaint.status}
+                            </span>
+                          </td>
                           <td>
                             {new Date(complaint.createdAt).toLocaleDateString()}
                           </td>
@@ -273,15 +401,23 @@ export default function StudentDashboard() {
           {menu === "profile" && (
             <section className="student-profile-box">
               <h3>Profile</h3>
-              <p>
-                <strong>Name:</strong> {user.name}
-              </p>
-              <p>
-                <strong>Email:</strong> {user.email}
-              </p>
-              <p>
-                <strong>Role:</strong> {user.role}
-              </p>
+
+              <div className="student-profile-grid">
+                <div className="student-profile-item">
+                  <span>Name</span>
+                  <strong>{user.name}</strong>
+                </div>
+
+                <div className="student-profile-item">
+                  <span>Email</span>
+                  <strong>{user.email}</strong>
+                </div>
+
+                <div className="student-profile-item">
+                  <span>Role</span>
+                  <strong>{user.role}</strong>
+                </div>
+              </div>
             </section>
           )}
         </main>

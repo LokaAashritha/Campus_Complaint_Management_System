@@ -92,70 +92,89 @@ export default function StudentAuth({ initialMode = "login" }) {
 
   return (
     <div className="student-auth-page">
-      <div className="student-auth-card">
-        <Link className="student-home-link" to="/">
-          Back to landing page
-        </Link>
+      <div className="student-auth-shell">
+        <aside className="student-auth-info">
+          <p className="student-auth-kicker">Student Portal</p>
+          <h1>Raise, track, and resolve campus issues with confidence.</h1>
+          <p>
+            One clean workspace for complaint submission, status tracking, and
+            transparent communication with administrators.
+          </p>
 
-        <h1>Campus Complaint Management System</h1>
-        <h3>{mode === "login" ? "Student Login" : "Student Registration"}</h3>
+          <ul className="student-auth-highlights">
+            <li>Fast complaint submission in a few clicks</li>
+            <li>Live status updates from pending to resolved</li>
+            <li>Reliable history of every complaint you raise</li>
+          </ul>
+        </aside>
 
-        <div className="student-toggle">
-          <button
-            type="button"
-            className={mode === "login" ? "active" : ""}
-            onClick={() => navigate("/student/login", { replace: true })}
-          >
-            Login
-          </button>
+        <div className="student-auth-card">
+          <Link className="student-home-link" to="/">
+            Back to landing page
+          </Link>
 
-          <button
-            type="button"
-            className={mode === "register" ? "active" : ""}
-            onClick={() => navigate("/student/register", { replace: true })}
-          >
-            Register
-          </button>
-        </div>
+          <h2>Campus Complaint Management System</h2>
+          <h3>{mode === "login" ? "Student Login" : "Student Registration"}</h3>
 
-        <form onSubmit={handleSubmit}>
-          {mode === "register" && (
+          <div className="student-toggle">
+            <button
+              type="button"
+              className={mode === "login" ? "active" : ""}
+              onClick={() => navigate("/student/login", { replace: true })}
+            >
+              Login
+            </button>
+
+            <button
+              type="button"
+              className={mode === "register" ? "active" : ""}
+              onClick={() => navigate("/student/register", { replace: true })}
+            >
+              Register
+            </button>
+          </div>
+
+          <form onSubmit={handleSubmit}>
+            {mode === "register" && (
+              <input
+                type="text"
+                placeholder="Full Name"
+                value={formData.name}
+                onChange={(e) =>
+                  setFormData({ ...formData, name: e.target.value })
+                }
+              />
+            )}
+
             <input
-              type="text"
-              placeholder="Full Name"
-              value={formData.name}
+              type="email"
+              placeholder="Email Address"
+              value={formData.email}
               onChange={(e) =>
-                setFormData({ ...formData, name: e.target.value })
+                setFormData({ ...formData, email: e.target.value })
               }
             />
-          )}
 
-          <input
-            type="email"
-            placeholder="Email Address"
-            value={formData.email}
-            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-          />
+            <input
+              type="password"
+              placeholder="Password"
+              value={formData.password}
+              onChange={(e) =>
+                setFormData({ ...formData, password: e.target.value })
+              }
+            />
 
-          <input
-            type="password"
-            placeholder="Password"
-            value={formData.password}
-            onChange={(e) =>
-              setFormData({ ...formData, password: e.target.value })
-            }
-          />
+            {error && <p className="student-status-message error">{error}</p>}
 
-          {error && <p className="student-status-message error">{error}</p>}
-
-          <button type="submit" disabled={loading}>
-            {loading
-              ? "Please wait..."
-              : mode === "login"
-              ? "Login"
-              : "Register and Login"}
-          </button>
-        </form>
+            <button type="submit" disabled={loading}>
+              {loading
+                ? "Please wait..."
+                : mode === "login"
+                ? "Login"
+                : "Register and Login"}
+            </button>
+          </form>
+        </div>
       </div>
     </div>
   );

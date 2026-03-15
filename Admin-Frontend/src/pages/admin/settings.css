@@ -2,6 +2,25 @@
   width: 100%;
 }
 
+.settings-message {
+  margin: 0 0 16px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  font-size: 14px;
+}
+
+.settings-message.error {
+  background: #fef2f2;
+  border-color: #fecaca;
+  color: #991b1b;
+}
+
+.settings-muted {
+  color: #6b7280;
+  font-size: 14px;
+}
+
 .settings-card {
   background: #ffffff;
   border-radius: 10px;
@@ -102,10 +121,4 @@
 .user-table td {
   padding: 10px;
   border-bottom: 1px solid #e5e7eb;
-}
-
-.user-action {
-  color: #2563eb;
-  cursor: pointer;
-  font-size: 14px;
 }
